@@ -1,5 +1,6 @@
 from .ade20k import ADE20K
 from .camvid import CamVid
+from .tennislines import TennisLines
 from .cityscapes import CityScapes
 from .pascalcontext import PASCALContext
 from .cocostuff import COCOStuff
@@ -20,6 +21,7 @@ from .facesynthetics import FaceSynthetics
 
 __all__ = [
     'CamVid',
+    'TennisLines',
     'CityScapes',
     'ADE20K',
     'MHPv1',

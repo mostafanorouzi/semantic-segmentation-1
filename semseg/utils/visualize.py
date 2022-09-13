@@ -25,7 +25,7 @@ def visualize_dataset_sample(dataset, root, split='val', batch_size=4):
     print(f"Classes\t\t: {label.unique().tolist()}")
 
     label[label == -1] = 0
-    label[label == 255] = 0
+    # label[label == 255] = 0
     labels = [dataset.PALETTE[lbl.to(int)].permute(2, 0, 1) for lbl in label]
     labels = torch.stack(labels)
 

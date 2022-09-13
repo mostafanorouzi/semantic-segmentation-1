@@ -1,9 +1,12 @@
-import torch 
+import os
+
+import torch
 import argparse
 import yaml
 import time
 import multiprocessing as mp
 from tabulate import tabulate
+from torchsummary import summary
 from tqdm import tqdm
 from torch.utils.data import DataLoader
 from pathlib import Path
@@ -39,9 +42,9 @@ def main(cfg, gpu, save_dir):
     valset = eval(dataset_cfg['NAME'])(dataset_cfg['ROOT'], 'val', valtransform)
     
     model = eval(model_cfg['NAME'])(model_cfg['BACKBONE'], trainset.n_classes)
-    model.init_pretrained(model_cfg['PRETRAINED'])
+    # model.init_pretrained(model_cfg['PRETRAINED'])
     model = model.to(device)
-
+    summary(model, (3, 512, 512))
     if train_cfg['DDP']: 
         sampler = DistributedSampler(trainset, dist.get_world_size(), dist.get_rank(), shuffle=True)
         model = DDP(model, device_ids=[gpu])
@@ -113,6 +116,7 @@ def main(cfg, gpu, save_dir):
 
 
 if __name__ == '__main__':
+    os.chdir('..')
     parser = argparse.ArgumentParser()
     parser.add_argument('--cfg', type=str, default='configs/custom.yaml', help='Configuration file to use')
     args = parser.parse_args()

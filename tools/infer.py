@@ -1,3 +1,5 @@
+import os
+
 import torch
 import argparse
 import yaml
@@ -82,8 +84,9 @@ class SemSeg:
 
 
 if __name__ == '__main__':
+    os.chdir('..')
     parser = argparse.ArgumentParser()
-    parser.add_argument('--cfg', type=str, default='configs/ade20k.yaml')
+    parser.add_argument('--cfg', type=str, default='configs/custom.yaml')
     args = parser.parse_args()
 
     with open(args.cfg) as f:

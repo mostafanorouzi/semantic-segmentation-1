@@ -36,7 +36,7 @@ class CamVid(Dataset):
     
     def __getitem__(self, index: int) -> Tuple[Tensor, Tensor]:
         img_path = str(self.files[index])
-        lbl_path = str(self.files[index]).replace(self.split, self.split + '_labels').replace('.png', '_L.png')
+        lbl_path = str(self.files[index]).replace(self.split, self.split + '_labels').replace('.png', '.png')
 
         image = io.read_image(img_path)
         label = io.read_image(lbl_path)
@@ -58,4 +58,4 @@ class CamVid(Dataset):
 
 if __name__ == '__main__':
     from semseg.utils.visualize import visualize_dataset_sample
-    visualize_dataset_sample(CamVid, '/home/sithu/datasets/CamVid')
+    visualize_dataset_sample(CamVid, '/home/mostafa/PIDNet/data/camvid')

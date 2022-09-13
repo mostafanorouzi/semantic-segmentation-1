@@ -4,18 +4,18 @@ SAVE_DIR        : 'output'         # output folder name used for saving the mode
 MODEL:                                    
   NAME          : DDRNet                                           # name of the model you are using
   BACKBONE      : DDRNet-23slim                                                 # model variant
-  PRETRAINED    : 'checkpoints/backbones/ddrnet/ddrnet_23slim.pth'              # backbone model's weight 
+  PRETRAINED    : 'checkpoints/backbones/ddrnet/best_val_smaller_camvid.pth'              # backbone model's weight
 
 DATASET:
-  NAME          : CityScapes                                          # dataset name to be trained with (camvid, cityscapes, ade20k)
-  ROOT          : 'data/CityScapes'                                   # dataset root path
-  IGNORE_LABEL  : 255
+  NAME          : TennisLines                                          # dataset name to be trained with (camvid, cityscapes, ade20k)
+  ROOT          : 'data/TennisLines'                                   # dataset root path
+  IGNORE_LABEL  : 10
 
 TRAIN:
-  IMAGE_SIZE    : [512, 512]    # training image size in (h, w)
-  BATCH_SIZE    : 2               # batch size used to train
-  EPOCHS        : 100             # number of epochs to train
-  EVAL_INTERVAL : 20              # evaluation interval during training
+  IMAGE_SIZE    : [256, 256]    # training image size in (h, w)
+  BATCH_SIZE    : 4               # batch size used to train
+  EPOCHS        : 200             # number of epochs to train
+  EVAL_INTERVAL : 5              # evaluation interval during training
   AMP           : false           # use AMP in training
   DDP           : false           # use DDP training
 
@@ -29,7 +29,7 @@ OPTIMIZER:
   WEIGHT_DECAY  : 0.01            # decay rate used in optimizer 
 
 SCHEDULER:
-  NAME          : warmuppolylr    # scheduler name
+  NAME          : warmupcosinelr    # scheduler name
   POWER         : 0.9             # scheduler power
   WARMUP        : 10              # warmup epochs used in scheduler
   WARMUP_RATIO  : 0.1             # warmup ratio
@@ -45,7 +45,7 @@ EVAL:
 
 
 TEST:
-  MODEL_PATH    : 'checkpoints/pretrained/ddrnet/ddrnet_23slim_city.pth'    # trained model file path
-  FILE          : 'assests/cityscapes'                    # filename or foldername 
-  IMAGE_SIZE    : [1024, 1024]                            # inference image size in (h, w)
+  MODEL_PATH    : 'output/DDRNet_DDRNet-23slim_TennisLines.pth'    # trained model file path
+  FILE          : 'data/TennisLines/test'                    # filename or foldername
+  IMAGE_SIZE    : [256, 256]                            # inference image size in (h, w)
   OVERLAY       : true                                    # save the overlay result (image_alpha+label_alpha)
