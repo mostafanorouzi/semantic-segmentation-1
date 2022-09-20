@@ -28,7 +28,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Speed Measurement')
 
     parser.add_argument('--a', help='pidnet-s, pidnet-m or pidnet-l', default='pidnet-s', type=str)
-    parser.add_argument('--c', help='number of classes', type=int, default=19)
+    parser.add_argument('--c', help='number of classes', type=int, default=2)
     parser.add_argument('--r', help='input resolution', type=int, nargs='+', default=(1024, 2048))
 
     args = parser.parse_args()
@@ -46,15 +46,11 @@ if __name__ == '__main__':
         cfg = yaml.load(f, Loader=yaml.SafeLoader)
 
     device = torch.device(cfg['DEVICE'])
-
     eval_cfg = cfg['EVAL']
-    transform = get_val_augmentation(eval_cfg['IMAGE_SIZE'])
-    dataset = eval(cfg['DATASET']['NAME'])(cfg['DATASET']['ROOT'], 'val', transform)
-    dataloader = DataLoader(dataset, 1, num_workers=1, pin_memory=True)
     # Comment batchnorms here and in model_utils before testing speed since the batchnorm could be integrated into conv operation
     # (do not comment all, just the batchnorm following its corresponding conv layer)
     model_path = Path(eval_cfg['MODEL_PATH'])
-    model = eval(cfg['MODEL']['NAME'])(cfg['MODEL']['BACKBONE'], dataset.n_classes)
+    model = eval(cfg['MODEL']['NAME'])(cfg['MODEL']['BACKBONE'], 2)
     model.load_state_dict(torch.load(str(model_path), map_location='cuda:0'))
     model = model.to(device)
     model.eval()
