@@ -14,7 +14,7 @@ from torch.utils.tensorboard import SummaryWriter
 from torch.cuda.amp import GradScaler, autocast
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.utils.data import DistributedSampler, RandomSampler
-from torch import distributed as dist
+from torch import distributed as dist, nn
 from semseg.models import *
 from semseg.datasets import * 
 from semseg.augmentations import get_train_augmentation, get_val_augmentation
@@ -42,7 +42,8 @@ def main(cfg, gpu, save_dir):
     valset = eval(dataset_cfg['NAME'])(dataset_cfg['ROOT'], 'val', valtransform)
     
     model = eval(model_cfg['NAME'])(model_cfg['BACKBONE'], trainset.n_classes)
-    # model.init_pretrained(model_cfg['PRETRAINED'])
+    # model.load_state_dict(torch.load(model_cfg['PRETRAINED'], map_location='cuda:0'), strict=False)
+    model.init_pretrained(model_cfg['PRETRAINED'])
     model = model.to(device)
     summary(model, (3, 512, 512))
     if train_cfg['DDP']: 

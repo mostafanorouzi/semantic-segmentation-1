@@ -188,7 +188,7 @@ class DDRNet(nn.Module):
 
     def init_pretrained(self, pretrained: str = None) -> None:
         if pretrained:
-            self.load_state_dict(torch.load(pretrained, map_location='cpu')['model'], strict=False)
+            self.load_state_dict(torch.load(pretrained, map_location='cuda:0'), strict=False)
 
     def _make_layer(self, block, inplanes, planes, depths, s=1) -> nn.Sequential:
         downsample = None
